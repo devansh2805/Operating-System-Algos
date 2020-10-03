@@ -67,7 +67,7 @@ abstract class PreemptiveSchedulingAlgorithms {
 		quantumTime = scannerObject.nextInt();
 		while(true) {
 			System.out.println();
-			System.out.println("1. Shortest Time Remaining First Scheduling");
+			System.out.println("1. Shortest Remaining Time First Scheduling");
 			System.out.println("2. Priority Scheduling");
 			System.out.println("3. Round Robin Scheduling");
 			System.out.println("4. End Program");
@@ -78,10 +78,11 @@ abstract class PreemptiveSchedulingAlgorithms {
 			}
 			switch(choice) {
 				case 1:
-					System.out.println("-------------------------------------Shortest Time Remaining First Scheduling-------------------------------------");
-					ShortestTimeRemainingFirst strfObject = new ShortestTimeRemainingFirst();
-					strfObject.getProcessSequence();
-					strfObject.getProcessMetrics();
+					System.out.println("-------------------------------------Shortest Remaining Time First Scheduling-------------------------------------");
+					ShortestRemainingTimeFirst srtfObject = new ShortestRemainingTimeFirst();
+					srtfObject.getProcessSequence();
+					srtfObject.getProcessMetrics();
+					printProcessMetrics();
 					System.out.println("\n-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----");
 					break;
 				case 2:
@@ -89,6 +90,7 @@ abstract class PreemptiveSchedulingAlgorithms {
 					PriorityScheduling psObject = new PriorityScheduling();
 					psObject.getProcessSequence();
 					psObject.getProcessMetrics();
+					printProcessMetrics();
 					System.out.println("\n-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x----");
 					break;
 				case 3:
@@ -96,10 +98,10 @@ abstract class PreemptiveSchedulingAlgorithms {
 					RoundRobinAlgorithm rorObject = new RoundRobinAlgorithm();
 					rorObject.getProcessSequence();
 					rorObject.getProcessMetrics();
+					printProcessMetrics();
 					System.out.println("\n-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----x-----");
 					break;
 			}
-			printProcessMetrics();
 			for(i=0;i<numberOfProcesses;i++) {
 				processInfo[i].resetProcessValues();
 			}
@@ -155,11 +157,11 @@ abstract class PreemptiveSchedulingAlgorithms {
 	}
 }
 
-class ShortestTimeRemainingFirst extends PreemptiveSchedulingAlgorithms {
+class ShortestRemainingTimeFirst extends PreemptiveSchedulingAlgorithms {
 	StringBuilder processGanttChart;
 	Vector<Integer> timeChart;
 	
-	ShortestTimeRemainingFirst() {
+	ShortestRemainingTimeFirst() {
 		processGanttChart = new StringBuilder();
 		timeChart = new Vector<Integer>();
 	}
@@ -317,6 +319,7 @@ class PriorityScheduling extends PreemptiveSchedulingAlgorithms {
 					process.waitingTime += 1;
 				}
 			}
+			System.out.println();
 		}
 		int printIndex = 0;
 		System.out.print("Process Gantt Chart: ");
@@ -409,7 +412,6 @@ class RoundRobinAlgorithm extends PreemptiveSchedulingAlgorithms{
 				readyQueue.add(process);
 			}
 		}
-		printReadyQueue(time);
 		while(!readyQueue.isEmpty()) {
 			int min = Integer.MAX_VALUE, index = numberOfProcesses;
 			Process currentProcessHeader = readyQueue.remove();
@@ -417,13 +419,13 @@ class RoundRobinAlgorithm extends PreemptiveSchedulingAlgorithms{
 				if(process.processIndex == currentProcessHeader.processIndex) {
 					if(process.remainingTime <= quantumTime) {
 						for(int i=0;i<process.remainingTime;i++) {
+							printReadyQueue(time);
 							time++;
 							for(Process newProcess : processInfo) {
 								if(newProcess.arrivalTime == time) {
 									readyQueue.add(newProcess);
 								}
 							}
-							printReadyQueue(time);
 							processGanttChart.append(process.processIndex);
 							timeChart.add(time-1);
 						}
@@ -432,13 +434,13 @@ class RoundRobinAlgorithm extends PreemptiveSchedulingAlgorithms{
 						process.turnAroundTime = process.completionTime - process.arrivalTime;
 					} else {
 						for(int i=0;i<quantumTime;i++) {
+							printReadyQueue(time);
 							time++;
 							for(Process newProcess : processInfo) {
 								if(newProcess.arrivalTime == time) {
 									readyQueue.add(newProcess);
 								}
 							}
-							printReadyQueue(time);
 							processGanttChart.append(process.processIndex);
 							timeChart.add(time-1);
 						}
