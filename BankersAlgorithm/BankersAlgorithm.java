@@ -45,21 +45,21 @@ class BankersAlgorithm {
 			return;
 		}
 		System.out.println();
-		// while(true) {
-		// 	System.out.println("\n");
-		// 	System.out.println("1. Make Request");
-		// 	System.out.println("2. End Program");
-		// 	System.out.print("Enter Choice: ");
-		// 	int choice = scanner.nextInt();
-		// 	switch(choice) {
-		// 		case 1:
-		// 			makeRequest();
-		// 			break;
-		// 		case 2:
-		// 			scanner.close();
-		// 			return;
-		// 	}
-		// }
+		while(true) {
+			System.out.println("\n");
+			System.out.println("1. Make Request");
+			System.out.println("2. End Program");
+			System.out.print("Enter Choice: ");
+			int choice = scanner.nextInt();
+			switch(choice) {
+				case 1:
+					makeRequest();
+					break;
+				case 2:
+					scanner.close();
+					return;
+			}
+		}
 	}
 
 	public static void printArray(String message, int[] arrayToPrint, String colorCode) {
